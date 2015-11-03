@@ -24,6 +24,15 @@ module Amorail # :nodoc: all
         custom_fields << { id: prop_id, values: [prop_val] }
       end
 
+      abitary_properties.each do |k, v|
+        prop = props[k]
+        next if prop.nil?
+
+        prop_id = prop.id
+        prop_val = {value: v}
+        custom_fields << { id: prop_id, values: [prop_val] }      
+      end
+
       custom_fields
     end
 
