@@ -53,6 +53,8 @@ module Amorail
     amo_field :id, :request_id, :responsible_user_id,
               date_create: :timestamp, last_modified: :timestamp
 
+    attr_accessor :abitary_properties
+
     delegate :amo_name, :remote_url, :client, to: :class
     delegate :properties, to: Amorail
 
@@ -64,6 +66,10 @@ module Amorail
     require 'amorail/entity/params'
     require 'amorail/entity/persistance'
     require 'amorail/entity/finders'
+
+    def abitary_properties
+      @abitary_properties ||= {}
+    end
 
     def reload_model(info)
       merge_params(info)
@@ -87,9 +93,13 @@ module Amorail
       fields.each do |f|
         fname = f['code'] || f['name']
         next if fname.nil?
-        fname = "#{fname.downcase}="
+        fname = "#{fname.downcase}"
         fval = f.fetch('values').first.fetch('value')
-        send(fname, fval) if respond_to?(fname)
+        if respond_to?("#{fname}=")
+          send("#{fname}=", fval) 
+        else
+          abitary_properties[fname] = fval
+        end
       end
     end
 
