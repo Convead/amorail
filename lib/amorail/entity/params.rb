@@ -25,7 +25,7 @@ module Amorail # :nodoc: all
       end
 
       abitary_properties.each do |k, v|
-        prop = props[k]
+        prop = props.data.values.find{|p| p.id == k.to_s}
         next if prop.nil?
 
         prop_id = prop.id
