@@ -88,15 +88,21 @@ module Amorail
 
     def merge_custom_fields(fields)
       return if fields.nil?
+
+      props = properties.send(self.class.amo_name)
       fields.each do |f|
         fname = f['code'] || f['name']
         next if fname.nil?
-        fname = "#{fname.downcase}"
         fval = f.fetch('values').first.fetch('value')
-        if respond_to?("#{fname}=")
-          send("#{fname}=", fval) 
+        if respond_to?("#{fname.downcase}=")
+          # custom fields
+          send("#{fname.downcase}=", fval) 
         else
-          abitary_properties[fname] = fval
+          # arbitary fields
+          prop = props[fname]
+          if prop.present?
+            abitary_properties[prop.id] = fval
+          end
         end
       end
     end
