@@ -80,7 +80,7 @@ module Amorail
       when 503
         fail ::Amorail::AmoServiceUnaviableError
       else
-        fail ::Amorail::AmoUnknownError(response.body)
+        fail ::Amorail::AmoUnknownError, response.body
       end
     end
   end
