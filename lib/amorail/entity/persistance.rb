@@ -16,7 +16,7 @@ module Amorail # :nodoc: all
       if new_record?
         push('add')
       else
-        self.last_modified = Time.now.to_i
+        self.last_modified = Time.now.to_i + 20
         push('update')
       end
     end
@@ -31,7 +31,8 @@ module Amorail # :nodoc: all
 
     def update(attrs = {})
       return false if new_record?
-      attrs = attrs.dup.with_indifferent_access.merge({last_modified: Time.now.to_i})
+      last_modified = Time.now.to_i + 20
+      attrs = attrs.dup.with_indifferent_access.merge({last_modified: last_modified})
       merge_params(attrs)
       push('update')
     end
